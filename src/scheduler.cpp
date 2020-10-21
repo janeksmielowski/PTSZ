@@ -8,9 +8,16 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
+    if (argc != 2) {
+        cout << "Please provide required args: index" << endl;
+        return EXIT_FAILURE;
+    }
+
+    string index = argv[1];
+
     // TODO: implement me
     for (int i = 0; i < INSTANCES; ++i) {
-        string filename = "out_136815_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = "out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ofstream outfile(filename);
 
         outfile << 0 << endl;

@@ -43,9 +43,10 @@ void testInstances(string index) {
 }
 
 void testSchedules(string index) {
-    vector<Task> instance;
+    vector<vector<Task>> instances(10);
 
     for (int i = 0; i < INSTANCES; ++i) {
+        vector<Task> instance;
 
         string filename = "in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ifstream infile(filename);
@@ -60,6 +61,7 @@ void testSchedules(string index) {
         }
 
         infile.close();
+        instances[i] = instance;
     }
 
     for (int i = 0; i < INSTANCES; ++i) {
@@ -76,10 +78,10 @@ void testSchedules(string index) {
         for (int j = 0; j < INSTANCE_SIZES[i]; ++j) {
             int taskNumber;
             infile >> taskNumber;
-            Task task = instance[taskNumber - 1];
+            Task task = instances[i][taskNumber - 1];
 
             if (currentTime < task.readinessTime) {
-                currentTime = task.readinessTime;
+                currentTime += task.readinessTime - currentTime;
             }
 
             currentTime += task.processingTime;
