@@ -1,7 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+#include <iostream>
 #include <vector>
 #include <windows.h>
 
@@ -24,6 +25,18 @@ public:
     
     bool operator< (TimeWeight right) {
         return this->weight < right.weight;
+    }
+};
+
+class TimeGuard {
+    clock_t timeMemory;
+public:
+    TimeGuard() {
+        this->timeMemory = clock();
+    }
+
+    double stop() {
+        return double(clock() - this->timeMemory);
     }
 };
 
@@ -76,6 +89,8 @@ int main(int argc, char** argv) {
     CreateDirectoryA(path.c_str(), NULL);
 
     for (int i = 0; i < INSTANCES; ++i) {
+        TimeGuard guard = TimeGuard();
+
         int globalTime = 0, globalCriterion = 0;
 
         for (int j = 0; j < INSTANCE_SIZES[i]; ++j) {
@@ -94,11 +109,13 @@ int main(int argc, char** argv) {
 
             Task firstTask = instances[i][j];
             TimeWeight globals = getTimeWeight(globalTime, firstTask);
+
             globalTime = globals.time;
             globalCriterion += globals.weight;
         }
 
-        cout << INSTANCE_SIZES[i] << ": t=" << globalTime << ", c=" << globalCriterion << endl;
+        int millis = guard.stop();
+        cout << INSTANCE_SIZES[i] << ": scheduleTime= " << globalTime << ", criterion= " << globalCriterion << ", processingTime= " << millis << "ms" << endl;
 
         string filename = ".\\out\\out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ofstream outfile(filename);
