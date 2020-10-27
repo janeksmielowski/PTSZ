@@ -17,7 +17,7 @@ struct Task {
 void testInstances(string index) {
     for (int i = 0; i < INSTANCES; ++i) {
 
-        string filename = "in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = ".\\instances\\in_" + index + "\\in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ifstream infile(filename);
         int size;
         bool valid = true;
@@ -48,7 +48,7 @@ void testSchedules(string index) {
     for (int i = 0; i < INSTANCES; ++i) {
         vector<Task> instance;
 
-        string filename = "in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = ".\\instances\\in_" + index + "\\in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ifstream infile(filename);
         int size;
 
@@ -66,7 +66,7 @@ void testSchedules(string index) {
 
     for (int i = 0; i < INSTANCES; ++i) {
 
-        string filename = "out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = ".\\out\\out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ifstream infile(filename);
         
         int presumedCriterion;
@@ -81,7 +81,7 @@ void testSchedules(string index) {
             Task task = instances[i][taskNumber - 1];
 
             if (currentTime < task.readinessTime) {
-                currentTime += task.readinessTime - currentTime;
+                currentTime = task.readinessTime;
             }
 
             currentTime += task.processingTime;

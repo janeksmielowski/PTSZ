@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <vector>
+#include <windows.h>
 
 #include "settings.h"
 
@@ -54,7 +55,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < INSTANCES; ++i) {
         vector<Task> instance;
 
-        string filename = "in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = ".\\instances\\in_" + index + "\\in_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ifstream infile(filename);
         int size;
 
@@ -70,6 +71,9 @@ int main(int argc, char** argv) {
         infile.close();
         instances[i] = instance;
     }
+
+    string path = ".\\out";
+    CreateDirectoryA(path.c_str(), NULL);
 
     for (int i = 0; i < INSTANCES; ++i) {
         int globalTime = 0, globalCriterion = 0;
@@ -96,7 +100,7 @@ int main(int argc, char** argv) {
 
         cout << INSTANCE_SIZES[i] << ": t=" << globalTime << ", c=" << globalCriterion << endl;
 
-        string filename = "out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = ".\\out\\out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ofstream outfile(filename);
 
         outfile << globalCriterion << endl;

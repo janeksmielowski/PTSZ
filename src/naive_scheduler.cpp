@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <windows.h>
 
 #include "settings.h"
 
@@ -15,9 +16,12 @@ int main(int argc, char** argv) {
 
     string index = argv[1];
 
+    string path = ".\\out";
+    CreateDirectoryA(path.c_str(), NULL);
+
     // TODO: implement me
     for (int i = 0; i < INSTANCES; ++i) {
-        string filename = "out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = ".\\out\\out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ofstream outfile(filename);
 
         outfile << 0 << endl;

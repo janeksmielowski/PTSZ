@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+#include <windows.h>
 
 #include "settings.h"
 
@@ -12,8 +13,11 @@ int main(int argc, char** argv) {
     srand(time(NULL));
     rand();
 
+    string path = ".\\instances\\in_136815";
+    CreateDirectoryA(path.c_str(), NULL);
+
     for (int i = 0; i < INSTANCES; ++i) {
-        string filename = "in_136815_" + to_string(INSTANCE_SIZES[i]) + ".txt";
+        string filename = path + "\\in_136815_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ofstream outfile(filename);
 
         outfile << INSTANCE_SIZES[i] << endl;
