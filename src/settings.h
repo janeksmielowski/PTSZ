@@ -3,8 +3,8 @@
 
 /* INSTANCES */
 
-// const unsigned int INSTANCES = 1;
-// const unsigned int INSTANCE_SIZES[] = {4};
+// const unsigned int INSTANCES = 3;
+// const unsigned int INSTANCE_SIZES[] = {4, 6, 8};
 
 const unsigned int INSTANCES = 10;
 const unsigned int INSTANCE_SIZES[] = {50, 100, 150, 200, 250, 300, 350, 400, 450, 500};
