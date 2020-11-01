@@ -57,13 +57,16 @@ TimeWeight getTimeWeights(int time, Task left, Task right) {
 
 int main(int argc, char** argv) {
 
-    if (argc != 3) {
-        cout << "Please provide required args: input path, output path" << endl;
+    if (argc != 2) {
+        cout << "Please provide required args: input path" << endl;
         return EXIT_FAILURE;
     }
 
     string inputPath = argv[1];
-    string outputPath = argv[2];
+    string outputPath = inputPath;
+
+    int pathnameLastIndex = inputPath.find_last_of("/\\");
+    outputPath.replace(pathnameLastIndex + 1, 2, "out");
 
     // reading
 
@@ -110,9 +113,6 @@ int main(int argc, char** argv) {
         globalCriterion += globals.weight;
     }
 
-    int millis = guard.stop();
-    cout << size << ": scheduleTime= " << globalTime << ", criterion= " << globalCriterion << ", processingTime= " << millis << "ms" << endl;
-
     ofstream outfile(outputPath);
 
     outfile << globalCriterion << endl;
@@ -124,6 +124,9 @@ int main(int argc, char** argv) {
     outfile << instance[size - 1].number << endl;
 
     outfile.close();
+
+    int millis = guard.stop();
+    cout << size << ": scheduleTime= " << globalTime << ", criterion= " << globalCriterion << ", processingTime= " << millis << "ms" << endl;
 
     return EXIT_SUCCESS;
 }
