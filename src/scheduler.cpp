@@ -114,9 +114,6 @@ int main(int argc, char** argv) {
             globalCriterion += globals.weight;
         }
 
-        int millis = guard.stop();
-        cout << INSTANCE_SIZES[i] << ": scheduleTime= " << globalTime << ", criterion= " << globalCriterion << ", processingTime= " << millis << "ms" << endl;
-
         string filename = ".\\out\\out_" + index + "_" + to_string(INSTANCE_SIZES[i]) + ".txt";
         ofstream outfile(filename);
 
@@ -129,6 +126,10 @@ int main(int argc, char** argv) {
         outfile << instances[i][INSTANCE_SIZES[i] - 1].number << endl;
 
         outfile.close();
+
+        int millis = guard.stop();
+        cout << INSTANCE_SIZES[i] << ": scheduleTime= " << globalTime << ", criterion= " << globalCriterion << ", processingTime= " << millis << "ms" << endl;
+
     }
 
     return EXIT_SUCCESS;
