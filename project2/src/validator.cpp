@@ -57,7 +57,11 @@ void validate(int instanceSize) {
     ifstream scheduleFile(schedulePath);
 
     int presumedCriterion;
-    scheduleFile >> presumedCriterion;
+    string line;
+
+    getline(scheduleFile, line);
+    istringstream lineStream(line);
+    lineStream >> presumedCriterion;
 
     vector<Machine> machines = readMachineSchedules(scheduleFile);
 

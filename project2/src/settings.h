@@ -25,7 +25,7 @@ const int GEN_MACHINE_FACTOR_RANGE = 5;
 const int GEN_TASK_MAX_DURATION = 100;
 
 struct Machine {
-    int factor;
+    float factor;
     float time;
     std::vector<int> schedule;
 };
