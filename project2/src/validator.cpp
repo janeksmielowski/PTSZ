@@ -68,7 +68,7 @@ void validate(int instanceSize) {
 
     scheduleFile.close();
 
-    int criterion = 0;
+    float criterion = 0;
 
     for (int m = 0; m < MACHINES; ++m) {
         for (int s = 0; s < machines[m].schedule.size(); ++s) {
@@ -77,12 +77,13 @@ void validate(int instanceSize) {
             if (machines[m].time < task.readiness) {
                 machines[m].time = task.readiness;
             }
-            machines[m].time += task.duration;
+            machines[m].time += task.duration * machines[m].factor;
             criterion += (machines[m].time - task.readiness);
         }
     }
 
-    cout << instanceSize << ": " << fixed << setprecision(2) << criterion / instanceSize << " ";
+    criterion = (float) criterion / (float) instanceSize;
+    cout << instanceSize << ": " << fixed << setprecision(2) << criterion << " ";
     cout << (criterion == presumedCriterion ? "valid" : "invalid") << endl;
 }
 
