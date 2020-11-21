@@ -35,8 +35,8 @@ vector<float> generateMachines() {
     return machines;
 }
 
-void generate(int instanceSize) {
-    string filePath = PATH + INDEX_INPATH + "_" + to_string(instanceSize) + ".txt";
+void generate(int instanceSize, string path) {
+    string filePath = path + "_" + to_string(instanceSize) + ".txt";
     ofstream outfile(filePath);
 
     vector<float> machines = generateMachines();
@@ -61,11 +61,14 @@ int main() {
     srand(time(NULL));
     rand();
 
+    const string INDEX_INPATH = "\\in_136815";
+    const string PATH = INSTANCES_PATH + INDEX_INPATH;
+
     CreateDirectoryA(INSTANCES_PATH.c_str(), NULL);
     CreateDirectoryA(PATH.c_str(), NULL);
 
     for (int i = 0; i < INSTANCES; ++i) {
-        generate(INSTANCE_SIZES[i]);
+        generate(INSTANCE_SIZES[i], PATH + INDEX_INPATH);
     }
 
     return EXIT_SUCCESS;

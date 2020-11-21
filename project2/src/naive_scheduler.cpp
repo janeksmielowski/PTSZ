@@ -24,9 +24,9 @@ vector<Task> readInstance(ifstream &infile, int instanceSize) {
     return instance;
 }
 
-void schedule(int instanceSize) {
-    string infilePath = PATH + INDEX_INPATH + "_" + to_string(instanceSize) + ".txt";
-    string outfilePath = PATH + INDEX_OUTPATH + "_" + to_string(instanceSize) + ".txt";
+void schedule(int instanceSize, string inpath, string outpath) {
+    string infilePath = inpath + "_" + to_string(instanceSize) + ".txt";
+    string outfilePath = outpath + "_" + to_string(instanceSize) + ".txt";
 
     ifstream infile(infilePath);
 
@@ -53,12 +53,23 @@ void schedule(int instanceSize) {
     outfile.close();
 }
 
-int main() {
+int main(int argc, char** argv) {
     srand(time(NULL));
     rand();
 
+    if (argc != 2) {
+        cout << "Please provide required args: index" << endl;
+        return EXIT_FAILURE;
+    }
+
+    string index = argv[1];
+    string INDEX_INPATH = "\\in_" + index;
+    string INDEX_OUTPATH = "\\out_" + index;
+    string INPATH = INSTANCES_PATH + INDEX_INPATH + INDEX_INPATH;
+    string OUTPATH = INSTANCES_PATH + INDEX_INPATH + INDEX_OUTPATH;
+
     for (int i = 0; i < INSTANCES; ++i) {
-        schedule(INSTANCE_SIZES[i]);
+        schedule(INSTANCE_SIZES[i], INPATH, OUTPATH);
     }
 
     return EXIT_SUCCESS;

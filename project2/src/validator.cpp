@@ -40,9 +40,9 @@ vector<Machine> readMachineSchedules(ifstream &infile) {
     return machines;
 }
 
-void validate(int instanceSize) {
-    string instancePath = PATH + INDEX_INPATH + "_" + to_string(instanceSize) + ".txt";
-    string schedulePath = PATH + INDEX_OUTPATH + "_" + to_string(instanceSize) + ".txt";
+void validate(int instanceSize, string inpath, string outpath) {
+    string instancePath = inpath + "_" + to_string(instanceSize) + ".txt";
+    string schedulePath = outpath + "_" + to_string(instanceSize) + ".txt";
 
     ifstream instanceFile(instancePath);
 
@@ -91,12 +91,23 @@ void validate(int instanceSize) {
     cout << (criterion == presumedCriterion ? "valid" : "invalid") << endl;
 }
 
-int main() {
+int main(int argc, char** argv) {
     srand(time(NULL));
     rand();
 
+    if (argc != 2) {
+        cout << "Please provide required args: index" << endl;
+        return EXIT_FAILURE;
+    }
+
+    string index = argv[1];
+    string INDEX_INPATH = "\\in_" + index;
+    string INDEX_OUTPATH = "\\out_" + index;
+    string INPATH = INSTANCES_PATH + INDEX_INPATH + INDEX_INPATH;
+    string OUTPATH = INSTANCES_PATH + INDEX_INPATH + INDEX_OUTPATH;
+
     for (int i = 0; i < INSTANCES; ++i) {
-        validate(INSTANCE_SIZES[i]);
+        validate(INSTANCE_SIZES[i], INPATH, OUTPATH);
     }
 
     return EXIT_SUCCESS;
