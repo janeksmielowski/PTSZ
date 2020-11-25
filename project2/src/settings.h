@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <algorithm>
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
@@ -22,12 +23,14 @@ const int GEN_MACHINE_FACTOR_RANGE = 5;
 const int GEN_TASK_MAX_DURATION = 10;
 
 struct Machine {
+    int number;
     float factor;
     float time;
     std::vector<int> schedule;
 };
 
 struct Task {
+    int number;
     int duration;
     int readiness;
 };
