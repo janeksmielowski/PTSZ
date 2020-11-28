@@ -88,7 +88,7 @@ void validate(int instanceSize, string inpath, string outpath) {
 
     criterion = (float) criterion / (float) instanceSize;
     cout << instanceSize << ": " << fixed << setprecision(2) << criterion << " ";
-    cout << (criterion == presumedCriterion ? "valid" : "invalid") << endl;
+    cout << (fabs(criterion - presumedCriterion) < 1 ? "valid" : "invalid") << endl;
 }
 
 int main(int argc, char** argv) {

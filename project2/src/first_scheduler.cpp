@@ -26,7 +26,9 @@ vector<Task> readInstance(ifstream &infile, int instanceSize) {
 }
 
 bool instanceCompareFn(Task left, Task right) {
-    return left.readiness < right.readiness && left.duration < right.duration;
+    return left.readiness == right.readiness
+        ? left.duration < right.duration
+        : left.readiness < right.readiness;
 }
 
 bool machineFactorCompareFn(Machine left, Machine right) {
@@ -87,14 +89,16 @@ void schedule(int instanceSize, string inpath, string outpath) {
                 continue;
             }
 
-            int taskPickIndex = m * readyTasks.size() / MACHINES;
+            int taskPickIndex = 0;
             machines[m].schedule.push_back(readyTasks[taskPickIndex].number);
 
             if (machines[m].time < readyTasks[taskPickIndex].readiness) {
                 machines[m].time = readyTasks[taskPickIndex].readiness;
             }
 
-            machines[m].time += readyTasks[taskPickIndex].duration;
+            machines[m].time += readyTasks[taskPickIndex].duration * machines[m].factor;
+            machines[m].sumScheduleTime += (machines[m].time - readyTasks[taskPickIndex].readiness);
+
             readyTasks.erase(readyTasks.begin() + taskPickIndex);
 
             if (m == 0) {
@@ -117,14 +121,13 @@ void schedule(int instanceSize, string inpath, string outpath) {
 
     float criterion = 0;
     for (int m = 0; m < MACHINES; ++m) {
-        criterion += machines[m].time;
+        criterion += machines[m].sumScheduleTime;
     }
 
     ofstream outfile(outfilePath);
 
-// TODO: fix criterion evaluation
     criterion /= (float) instanceSize;
-    outfile << criterion << endl;
+    outfile << fixed << setprecision(2) << criterion << endl;
 
     for (int m = 0; m < MACHINES; ++m) {
         for (int i = 0; i < machines[m].schedule.size() - 1; ++i) {
