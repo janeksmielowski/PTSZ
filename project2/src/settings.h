@@ -12,8 +12,9 @@
 #include <vector>
 #include <windows.h>
 
-const int INDEXES = 14;
-const std::string INDEX_ARR[] = {"136774", "136785", "136812", "136815", "132336", "136803", "132639", "136814", "136807", "136798", "132337", "132321", "136808", "136691"};
+const int INDEXES = 9;
+const std::string INDEX_ARR[] = {"136812", "136815", "132639", "136814", "136807", "136798", "132321", "136808", "136691"};
+// const std::string INDEX_ARR[] = {"136808"};
 
 const int INSTANCES = 10;
 const int INSTANCE_SIZES[] = { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };

@@ -122,8 +122,8 @@ void validate(string index) {
         }
 
         criterion = (float) criterion / (float) instanceSize;
-        cout << fixed << setprecision(2) << criterion << " ";
-        cout << times[i] << " ";
+        // cout << fixed << setprecision(2) << criterion << " ";
+        cout << times[i];
         cout << endl;
     }
     cout << endl;
