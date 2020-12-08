@@ -32,20 +32,33 @@ void validate(int instanceSize, string inpath, string outpath) {
     string schedulePath = outpath + "_" + to_string(instanceSize) + ".txt";
 
     ifstream instanceFile(instancePath);
+    if (!instanceFile.good()) {
+        cout << "No instace file found" << endl;
+        return;
+    }
+
     int size;
 
     instanceFile >> size;
     vector<Task> instance = readInstance(instanceFile, size);
-
     instanceFile.close();
 
     ifstream scheduleFile(schedulePath);
+    if (!scheduleFile.good()) {
+        cout << "No schedule file found" << endl;
+        return;
+    }
+
     int presumedCriterion;
 
     scheduleFile >> presumedCriterion;
     vector<int> schedule = readSchedule(scheduleFile, size);
-
     scheduleFile.close();
+
+    if (schedule.size() != size) {
+        cout << "Not all tasks got scheduled" << endl;
+        return;
+    }
 
     float criterion = 0, weightSum = 0;
     vector<Machine> machines(MACHINES);
