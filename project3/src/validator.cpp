@@ -60,8 +60,8 @@ void validate(int instanceSize, string inpath, string outpath) {
             machines[m].time += instance[taskNumber].duration[m];
         }
 
-        criterion += instance[i].weight * max(0, machines[MACHINES - 1].time - instance[i].deadline);
-        weightSum += instance[i].weight;
+        criterion += instance[taskNumber].weight * max(0, machines[MACHINES - 1].time - instance[i].deadline);
+        weightSum += instance[taskNumber].weight;
     }
 
     criterion = (float) criterion / (float) weightSum;
