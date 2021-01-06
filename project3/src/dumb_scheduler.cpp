@@ -21,10 +21,8 @@ bool sortFn(Task left, Task right) {
     return (float)left.deadline / (float)leftWeight < (float)right.deadline / (float)rightWeight;
 }
 
-void schedule(int instanceSize, string inpath, string outpath) {
-    string infilePath = inpath + "_" + to_string(instanceSize) + ".txt";
-    string outfilePath = outpath + "_" + to_string(instanceSize) + ".txt";
-
+void schedule(string infilePath, string outfilePath) {
+    cout << infilePath << " " << outfilePath << endl;
     ifstream infile(infilePath);
 
     int size;
@@ -52,19 +50,17 @@ int main(int argc, char** argv) {
     rand();
 
     if (argc != 2) {
-        cout << "Please provide required args: index" << endl;
+        cout << "Please provide required args: path to input file" << endl;
         return EXIT_FAILURE;
     }
 
-    string index = argv[1];
-    string INDEX_INPATH = "\\in_" + index;
-    string INDEX_OUTPATH = "\\out_" + index;
-    string INPATH = INSTANCES_PATH + INDEX_INPATH + INDEX_INPATH;
-    string OUTPATH = INSTANCES_PATH + INDEX_INPATH + INDEX_OUTPATH;
+    string inputPath = argv[1];
+    string outputPath = inputPath;
 
-    for (int i = 0; i < INSTANCES; ++i) {
-        schedule(INSTANCE_SIZES[i], INPATH, OUTPATH);
-    }
+    int pathnameLastIndex = inputPath.find_last_of("/\\");
+    outputPath.replace(pathnameLastIndex + 1, 2, "out");
+
+    schedule(inputPath, outputPath);
 
     return EXIT_SUCCESS;
 }
