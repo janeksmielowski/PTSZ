@@ -21,8 +21,28 @@ bool sortFn(Task left, Task right) {
     return (float)left.deadline / (float)leftWeight < (float)right.deadline / (float)rightWeight;
 }
 
+float evalCriterion(vector<Task> instance, vector<Task> schedule) {
+    float criterion = 0, weightSum = 0;
+    vector<Machine> machines(MACHINES);
+
+    for (int i = 0; i < schedule.size(); ++i) {
+        int taskNumber = schedule[i].number - 1;
+        
+        for (int m = 0; m < MACHINES; ++m) {
+            if (m > 0) {
+                machines[m].time = max(machines[m].time, machines[m - 1].time);
+            }
+            machines[m].time += instance[taskNumber].duration[m];
+        }
+
+        criterion += instance[taskNumber].weight * max(0, machines[MACHINES - 1].time - instance[i].deadline);
+        weightSum += instance[taskNumber].weight;
+    }
+
+    return (float) criterion / (float) weightSum;
+};
+
 void schedule(string infilePath, string outfilePath) {
-    cout << infilePath << " " << outfilePath << endl;
     ifstream infile(infilePath);
 
     int size;
@@ -30,17 +50,19 @@ void schedule(string infilePath, string outfilePath) {
 
     int taskAssignment = size / MACHINES;
     vector<Task> instance = readInstance(infile, size);
+    vector<Task> schedule = instance;
 
     infile.close();
 
-    sort(instance.begin(), instance.end(), sortFn);
+    sort(schedule.begin(), schedule.end(), sortFn);
+    float criterion = evalCriterion(instance, schedule);
 
     ofstream outfile(outfilePath);
-    outfile << 0 << endl;
+    outfile << fixed << setprecision(2) << criterion << endl;
     for (int i = 0; i < size - 1; ++i) {
-        outfile << instance[i].number << " ";
+        outfile << schedule[i].number << " ";
     }
-    outfile << instance[size - 1].number << endl;
+    outfile << schedule[size - 1].number << endl;
 
     outfile.close();
 }

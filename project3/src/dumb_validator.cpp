@@ -91,7 +91,7 @@ void validate(string index) {
             return;
         }
 
-        int presumedCriterion;
+        float presumedCriterion;
 
         scheduleFile >> presumedCriterion;
         vector<int> schedule = readSchedule(scheduleFile, size);
@@ -115,7 +115,7 @@ void validate(string index) {
                 machines[m].time += instance[taskNumber].duration[m];
             }
 
-            criterion += instance[taskNumber].weight * max(0, machines[MACHINES - 1].time - instance[i].deadline);
+            criterion += instance[taskNumber].weight * max(0, machines[MACHINES - 1].time - instance[taskNumber].deadline);
             weightSum += instance[taskNumber].weight;
         }
 
