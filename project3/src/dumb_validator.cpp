@@ -39,10 +39,7 @@ vector<int> readSchedule(ifstream &infile, int size) {
     return schedule;
 }
 
-void validate(string index) {
-    vector<int> times;
-
-    cout << index << endl;
+void generateSchedules(vector<int> &times, string index) {
     for (int i = 0; i < INSTANCES; ++i) {
         int instanceSize = INSTANCE_SIZES[i];
         string instancePath = ".\\instances\\in_136815\\out_136815_" + to_string(instanceSize) + ".txt";
@@ -52,73 +49,81 @@ void validate(string index) {
 
         STARTUPINFO si;
         PROCESS_INFORMATION pi;
+        DWORD exit_code;
 
         TimeGuard guard = TimeGuard();
 
         CreateProcess(NULL, (LPSTR) inputCmd.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
         WaitForSingleObject(pi.hProcess, INFINITE);
+        GetExitCodeProcess(pi.hProcess, &exit_code);
 
         times.push_back(guard.stop());
     }
+}
 
-    // for (int i = 0; i < INSTANCES; ++i) {
-    //     int instanceSize = INSTANCE_SIZES[i];
+void validate(string index) {
+    vector<int> times;
 
-    //     string instancePath = ".\\instances\\in_136815\\in_136815_" + to_string(instanceSize) + ".txt";
-    //     string schedulePath = ".\\instances\\in_136815\\out_136815_" + to_string(instanceSize) + ".txt";
+    cout << index << endl;
+    generateSchedules(times, index);
 
-    //     ifstream instanceFile(instancePath);
-    //     if (!instanceFile.good()) {
-    //         cout << "No instace file found" << endl;
-    //         return;
-    //     }
+    for (int i = 0; i < INSTANCES; ++i) {
+        int instanceSize = INSTANCE_SIZES[i];
 
-    //     int size;
+        string instancePath = ".\\instances\\in_136815\\in_136815_" + to_string(instanceSize) + ".txt";
+        string schedulePath = ".\\instances\\in_136815\\out_136815_" + to_string(instanceSize) + ".txt";
 
-    //     instanceFile >> size;
-    //     vector<Task> instance = readInstance(instanceFile, size);
-    //     instanceFile.close();
+        ifstream instanceFile(instancePath);
+        if (!instanceFile.good()) {
+            cout << "No instace file found" << endl;
+            return;
+        }
 
-    //     ifstream scheduleFile(schedulePath);
-    //     if (!scheduleFile.good()) {
-    //         cout << "No schedule file found" << endl;
-    //         return;
-    //     }
+        int size;
 
-    //     int presumedCriterion;
+        instanceFile >> size;
+        vector<Task> instance = readInstance(instanceFile, size);
+        instanceFile.close();
 
-    //     scheduleFile >> presumedCriterion;
-    //     vector<int> schedule = readSchedule(scheduleFile, size);
-    //     scheduleFile.close();
+        ifstream scheduleFile(schedulePath);
+        if (!scheduleFile.good()) {
+            cout << "No schedule file found" << endl;
+            return;
+        }
 
-    //     if (schedule.size() != size) {
-    //         cout << "Not all tasks got scheduled" << endl;
-    //         return;
-    //     }
+        int presumedCriterion;
 
-    //     float criterion = 0, weightSum = 0;
-    //     vector<Machine> machines(MACHINES);
+        scheduleFile >> presumedCriterion;
+        vector<int> schedule = readSchedule(scheduleFile, size);
+        scheduleFile.close();
 
-    //     for (int i = 0; i < size; ++i) {
-    //         int taskNumber = schedule[i] - 1;
+        if (schedule.size() != size) {
+            cout << "Not all tasks got scheduled" << endl;
+            return;
+        }
+
+        float criterion = 0, weightSum = 0;
+        vector<Machine> machines(MACHINES);
+
+        for (int i = 0; i < size; ++i) {
+            int taskNumber = schedule[i] - 1;
             
-    //         for (int m = 0; m < MACHINES; ++m) {
-    //             if (m > 0) {
-    //                 machines[m].time = max(machines[m].time, machines[m - 1].time);
-    //             }
-    //             machines[m].time += instance[taskNumber].duration[m];
-    //         }
+            for (int m = 0; m < MACHINES; ++m) {
+                if (m > 0) {
+                    machines[m].time = max(machines[m].time, machines[m - 1].time);
+                }
+                machines[m].time += instance[taskNumber].duration[m];
+            }
 
-    //         criterion += instance[taskNumber].weight * max(0, machines[MACHINES - 1].time - instance[i].deadline);
-    //         weightSum += instance[taskNumber].weight;
-    //     }
+            criterion += instance[taskNumber].weight * max(0, machines[MACHINES - 1].time - instance[i].deadline);
+            weightSum += instance[taskNumber].weight;
+        }
 
-    //     criterion = (float) criterion / (float) weightSum;
-    //     cout << instanceSize << ": " << fixed << setprecision(2) << criterion << " ";
-    //     cout << (fabs(criterion - presumedCriterion) < 1 ? "valid" : "invalid") << endl;
-    //     // cout << times[i];
-    // }
-    // cout << endl;
+        criterion = (float) criterion / (float) weightSum;
+        cout << instanceSize << ": " << fixed << setprecision(2) << criterion << " ";
+        cout << (fabs(criterion - presumedCriterion) < 1 ? "valid" : "invalid") << " " << times[i] << endl;
+    }
+    cout << endl;
 }
 
 int main(int argc, char** argv) {
